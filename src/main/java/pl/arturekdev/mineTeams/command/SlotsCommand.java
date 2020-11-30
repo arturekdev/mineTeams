@@ -11,13 +11,12 @@ import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
 public class SlotsCommand extends SubCommand {
 
-    public SlotsCommand(Player player, String[] args) {
-        super(player, args);
+    public SlotsCommand() {
+        super("slots");
     }
 
     @Override
-    public void run() {
-
+    public void handleCommand(Player player, String[] arguments) {
         JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
 
         Team team = TeamUtil.getTeam(player);
@@ -27,7 +26,7 @@ public class SlotsCommand extends SubCommand {
             return;
         }
 
-        if (args.length != 2) {
+        if (arguments.length != 2) {
             MessageUtil.sendMessage(player, Messages.get("teamSlots", " &8>> &aTwój zespół aktualnie posiada &e%slots% &aslotów.").replace("%slots%", String.valueOf(team.getSlots())));
             if (team.getSlots() != config.get("slotsLimit").getAsInt()) {
                 MessageUtil.sendMessage(player, Messages.get("slotsUpgradeInformation", " &8>> &aMożesz powiększyć ilośc slotów w zespole komendą &e/team slots upgrade"));
@@ -35,7 +34,7 @@ public class SlotsCommand extends SubCommand {
             return;
         }
 
-        if (!args[1].equalsIgnoreCase("upgrade")) {
+        if (!arguments[1].equalsIgnoreCase("upgrade")) {
             MessageUtil.sendMessage(player, Messages.get("usageSlotsUpgrade", " &8>> &cPoprawne użycie: &e/team slots upgrade"));
         }
 

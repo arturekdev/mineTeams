@@ -1,19 +1,25 @@
 package pl.arturekdev.mineTeams.command.util;
 
+import lombok.Data;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+@Data
 public abstract class SubCommand {
 
-    public final String[] args;
-    public final Player player;
+    private final String name;
+    private final List<String> aliases;
 
-    public SubCommand(Player player, String[] args) {
-        this.player = player;
-        this.args = Arrays.copyOfRange(args, 1, args.length);
+    public SubCommand(String name, List<String> aliases) {
+        this.name = name;
+        this.aliases = aliases;
     }
 
-    public abstract void run();
+    public SubCommand(String name) {
+        this(name, Collections.emptyList());
+    }
 
+    public abstract void handleCommand(Player player, String[] arguments);
 }

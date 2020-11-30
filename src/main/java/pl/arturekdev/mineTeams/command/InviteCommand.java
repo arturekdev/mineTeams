@@ -12,21 +12,20 @@ import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
 public class InviteCommand extends SubCommand {
 
-    public InviteCommand(Player player, String[] args) {
-        super(player, args);
+    public InviteCommand() {
+        super("invite");
     }
 
     @Override
-    public void run() {
-
+    public void handleCommand(Player player, String[] arguments) {
         JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
 
-        if (args.length != 1) {
+        if (arguments.length != 1) {
             MessageUtil.sendMessage(player, Messages.get("usageCreate", " &8>> &cPoprawne użycie: &e/team invite <nick>"));
             return;
         }
 
-        Player victim = Bukkit.getPlayer(args[0]);
+        Player victim = Bukkit.getPlayer(arguments[0]);
 
         if (victim == null) {
             MessageUtil.sendMessage(player, Messages.get("offlinePlayer", " &8>> &cPodany gracz jest offline!"));

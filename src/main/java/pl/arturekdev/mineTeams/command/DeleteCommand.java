@@ -8,15 +8,16 @@ import pl.arturekdev.mineTeams.objects.team.Team;
 import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
+import java.util.Collections;
+
 public class DeleteCommand extends SubCommand {
 
-    public DeleteCommand(Player player, String[] args) {
-        super(player, args);
+    public DeleteCommand() {
+        super("delete", Collections.singletonList("remove"));
     }
 
     @Override
-    public void run() {
-
+    public void handleCommand(Player player, String[] arguments) {
         Team team = TeamUtil.getTeam(player);
 
         if (team == null) {

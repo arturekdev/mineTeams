@@ -10,20 +10,19 @@ import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 import pl.arturekdev.mineUtiles.utils.TimeUtil;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 public class InfoCommand extends SubCommand {
 
-    public InfoCommand(Player player, String[] args) {
-        super(player, args);
+    public InfoCommand() {
+        super("info", Collections.singletonList("about"));
     }
 
     @Override
-    public void run() {
-
-        if (args.length != 1) {
-
+    public void handleCommand(Player player, String[] arguments) {
+        if (arguments.length != 1) {
             Team team = TeamUtil.getTeam(player);
 
             if (team == null) {
@@ -66,7 +65,7 @@ public class InfoCommand extends SubCommand {
 
         } else {
 
-            Team team = TeamUtil.getTeam(args[0]);
+            Team team = TeamUtil.getTeam(arguments[0]);
 
             if (team == null) {
                 MessageUtil.sendMessage(player, Messages.get("teamIsNull", " &8>> &cNie ma takiego zespołu!"));

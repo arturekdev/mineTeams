@@ -10,13 +10,12 @@ import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
 public class LeaveCommand extends SubCommand {
 
-    public LeaveCommand(Player player, String[] args) {
-        super(player, args);
+    public LeaveCommand() {
+        super("leave");
     }
 
     @Override
-    public void run() {
-
+    public void handleCommand(Player player, String[] arguments) {
         Team team = TeamUtil.getTeam(player);
 
         if (team == null) {
