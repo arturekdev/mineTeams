@@ -3,7 +3,7 @@ package pl.arturekdev.mineTeams;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.arturekdev.mineTeams.command.TeamCommand;
+import pl.arturekdev.mineTeams.command.TeamsCommand;
 import pl.arturekdev.mineTeams.configuration.Config;
 import pl.arturekdev.mineTeams.listeners.AsyncPlayerChatListener;
 import pl.arturekdev.mineTeams.listeners.EntityDamageByEntityListener;
@@ -16,12 +16,15 @@ import pl.arturekdev.mineTeams.runnable.TeamsImportanceRunnable;
 
 import java.io.File;
 
+@Getter
 public final class Teams extends JavaPlugin {
 
-    @Getter
     private static Teams instance;
-    @Getter
     private Config configuration;
+
+    public static Teams getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -34,8 +37,8 @@ public final class Teams extends JavaPlugin {
         Messages messages = new Messages(this);
         messages.loadMessages();
 
-        getCommand("team").setExecutor(new TeamCommand());
-        getCommand("team").setTabCompleter(new TeamCommand());
+        getCommand("team").setExecutor(new TeamsCommand());
+        getCommand("team").setTabCompleter(new TeamsCommand());
 
         Bukkit.getPluginManager().registerEvents(new EntityDamageByEntityListener(), this);
         Bukkit.getPluginManager().registerEvents(new AsyncPlayerChatListener(), this);
