@@ -7,3 +7,7 @@ description: Minecraft teams
 website: https://minecodes.pl
 commands:
   team:
+    aliases:
+      - teams
+      - zespoly
+      - zespol
