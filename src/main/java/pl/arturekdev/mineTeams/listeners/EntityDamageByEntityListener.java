@@ -9,8 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.objects.Team;
-import pl.arturekdev.mineTeams.objects.utils.TeamUtil;
+import pl.arturekdev.mineTeams.objects.team.Team;
+import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
 public class EntityDamageByEntityListener implements Listener {

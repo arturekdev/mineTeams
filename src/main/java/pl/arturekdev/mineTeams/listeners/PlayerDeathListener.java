@@ -7,10 +7,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import pl.arturekdev.mineEconomy.EconomyService;
-import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.Teams;
-import pl.arturekdev.mineTeams.objects.Team;
-import pl.arturekdev.mineTeams.objects.utils.TeamUtil;
+import pl.arturekdev.mineTeams.messages.Messages;
+import pl.arturekdev.mineTeams.objects.team.Team;
+import pl.arturekdev.mineTeams.objects.team.TeamUtil;
+import pl.arturekdev.mineTeams.objects.user.User;
+import pl.arturekdev.mineTeams.objects.user.UserUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 import pl.arturekdev.mineUtiles.utils.TimeUtil;
 
@@ -20,6 +22,7 @@ public class PlayerDeathListener implements Listener {
     public void event(PlayerDeathEvent e) {
         Player victim = e.getEntity();
         Player killer = e.getEntity().getKiller();
+        User user = UserUtil.getUser(victim.getUniqueId());
 
         if (killer == null) {
             return;
@@ -34,12 +37,11 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        if (TeamUtil.getDeathsPlayers().containsKey(victim)) {
-            if (TeamUtil.getDeathsPlayers().get(victim) < System.currentTimeMillis() + TimeUtil.timeFromString(config.get("deathsDelay").getAsString())) {
-                MessageUtil.sendMessage(killer, Messages.get("lastHourKilled", " &8>> &cGracz, którego zabiłeś, został już zabity w ciągu godziny, więc nie otrzymujesz za niego nagrody!"));
-                return;
-            }
+        if (user.getLastDeath() < System.currentTimeMillis() + TimeUtil.timeFromString(config.get("deathsDelay").getAsString())) {
+            MessageUtil.sendMessage(killer, Messages.get("lastHourKilled", " &8>> &cGracz, którego zabiłeś, został już zabity w ciągu godziny, więc nie otrzymujesz za niego nagrody!"));
+            return;
         }
+
 
         Team victimTeam = TeamUtil.getTeam(victim);
         Team killerTeam = TeamUtil.getTeam(killer);

@@ -11,10 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.StringUtil;
 import pl.arturekdev.mineEconomy.EconomyService;
-import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.Teams;
-import pl.arturekdev.mineTeams.objects.Team;
-import pl.arturekdev.mineTeams.objects.utils.TeamUtil;
+import pl.arturekdev.mineTeams.messages.Messages;
+import pl.arturekdev.mineTeams.objects.team.Team;
+import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 import pl.arturekdev.mineUtiles.utils.TimeUtil;
 
@@ -150,13 +150,13 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
 
-            if (TeamUtil.getTeamsInvites().containsKey(team)) {
+            if (team.getInvites().contains(victim)) {
                 MessageUtil.sendMessage(sender, Messages.get("successCancelInvite", " &8>> &aPomyślnie anulowano zaproszenie dla &e%player%").replace("%player%", victim.getName()));
-                TeamUtil.getTeamsInvites().remove(team, victim);
+                team.getInvites().remove(victim);
                 return false;
             }
 
-            TeamUtil.getTeamsInvites().put(team, victim);
+            team.getInvites().add(victim);
 
             MessageUtil.sendMessage(sender, Messages.get("successInvite", " &8>> &aPomyślnie zaprosiłeś &e%player% &ado swojeto zespołu!").replace("%player%", victim.getName()));
             MessageUtil.sendMessage(sender, Messages.get("usageCancelInvite", " &8>> &aAby wycofać zaproszenie użyj komendy &e/team invite %player%").replace("%player%", victim.getName()));
@@ -170,11 +170,6 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
 
-            if (!TeamUtil.getTeamsInvites().containsValue(player)) {
-                MessageUtil.sendMessage(sender, Messages.get("youDontHaveInvite", " &8>> &cNie posiadasz zaproszenie do zespołu!"));
-                return false;
-            }
-
             Team team = TeamUtil.getTeam(args[1]);
 
             if (team == null) {
@@ -182,13 +177,13 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
 
-            if (TeamUtil.getTeamsInvites().get(team) != player) {
+            if (!team.getInvites().contains(player)) {
                 MessageUtil.sendMessage(sender, Messages.get("youDontHaveInvite", " &8>> &cNie posiadasz zaproszenie do tego zespołu!"));
                 return false;
             }
 
             team.getMembers().add(player.getUniqueId());
-            TeamUtil.getTeamsInvites().remove(team, player);
+            team.getInvites().remove(player);
 
             MessageUtil.sendMessage(sender, Messages.get("successJoin", " &8>> &aPomyślnie dołączyłeś do zespołu &e%tag%").replace("%tag%", team.getTag()));
             Bukkit.broadcastMessage(MessageUtil.fixColor(Messages.get("successJoinBroadcast", " &6&lZespoły &8>> &e%player% &adołączył do zespołu &e%tag%").replace("%player%", player.getName()).replace("%tag%", team.getTag())));

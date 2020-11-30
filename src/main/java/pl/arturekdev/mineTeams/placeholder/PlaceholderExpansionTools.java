@@ -2,8 +2,8 @@ package pl.arturekdev.mineTeams.placeholder;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
-import pl.arturekdev.mineTeams.objects.Team;
-import pl.arturekdev.mineTeams.objects.utils.TeamUtil;
+import pl.arturekdev.mineTeams.objects.team.Team;
+import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
 public class PlaceholderExpansionTools extends PlaceholderExpansion {

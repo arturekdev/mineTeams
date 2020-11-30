@@ -1,4 +1,4 @@
-package pl.arturekdev.mineTeams.objects;
+package pl.arturekdev.mineTeams.objects.team;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +30,7 @@ public class Team {
     private int bank;
     private int vaultSize;
     private int slots;
+    private Set<Player> invites;
 
     public boolean isOnTeam(Player player) {
         return members.contains(player.getUniqueId()) || owner == player.getUniqueId();
