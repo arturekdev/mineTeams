@@ -113,12 +113,5 @@
             <version>2.9.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>eGlow</groupId>
-            <artifactId>eGlow</artifactId>
-            <version>API</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/jars/eGlow.jar</systemPath>
-        </dependency>
     </dependencies>
 </project>
