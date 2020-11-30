@@ -12,7 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.util.StringUtil;
 import pl.arturekdev.mineEconomy.EconomyService;
 import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.mineTeams;
+import pl.arturekdev.mineTeams.Teams;
 import pl.arturekdev.mineTeams.objects.Team;
 import pl.arturekdev.mineTeams.objects.utils.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
@@ -26,7 +26,7 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        JsonObject config = mineTeams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
+        JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
 
         if (args.length == 0) {
             for (String usageMain : Messages.getList("usageMain", " &8>> &6/team create <TAG> &7- Tworzenie nowego zespołu ; &8>> &6/team delete &7- Usuwanie zespołu ; &8>> &6/team invite <nick> &7- Zapraszanie gracza do zespołu ; &8>> &6/team join <TAG> &7- Dołączanie do zespołu ; &8>> &6/team kick <nick> &7- Wyrzucanie gracza z zespołu ; &8>> &6/team info [TAG] &7- Informacje o zespole")) {

@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import pl.arturekdev.mineEconomy.EconomyService;
 import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.mineTeams;
+import pl.arturekdev.mineTeams.Teams;
 import pl.arturekdev.mineTeams.objects.Team;
 import pl.arturekdev.mineTeams.objects.utils.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
@@ -25,7 +25,7 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        JsonObject config = mineTeams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
+        JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
 
         long playTime = System.currentTimeMillis() - victim.getFirstPlayed();
 

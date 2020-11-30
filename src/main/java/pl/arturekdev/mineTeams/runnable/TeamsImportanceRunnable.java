@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.mineTeams;
+import pl.arturekdev.mineTeams.Teams;
 import pl.arturekdev.mineTeams.objects.Team;
 import pl.arturekdev.mineTeams.objects.utils.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
@@ -16,7 +16,7 @@ public class TeamsImportanceRunnable implements Runnable {
     public void run() {
         for (Team team : TeamUtil.getTeams()) {
 
-            JsonObject config = mineTeams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
+            JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
 
             if (team.getImportance() > System.currentTimeMillis()) {
 

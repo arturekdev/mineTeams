@@ -1,6 +1,6 @@
 name: mineTeams
 version: ${project.version}
-main: pl.arturekdev.mineTeams.mineTeams
+main: pl.arturekdev.mineTeams.Teams
 api-version: 1.16
 authors: [ arturekdev ]
 description: Minecraft teams

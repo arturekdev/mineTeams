@@ -15,10 +15,10 @@ import pl.arturekdev.mineTeams.runnable.TeamsImportanceRunnable;
 
 import java.io.File;
 
-public final class mineTeams extends JavaPlugin {
+public final class Teams extends JavaPlugin {
 
     @Getter
-    private static mineTeams instance;
+    private static Teams instance;
     @Getter
     private Config configuration;
 
