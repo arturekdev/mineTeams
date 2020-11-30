@@ -1,0 +1,19 @@
+{
+  "configuration": {
+    "maxCharsTag": 5,
+    "slotsStart": 5,
+    "slotsLimit": 20,
+    "slotsUpgradeCoast": 150,
+    "vaultStartSize": 1,
+    "vaultUpgradeCoast": 200,
+    "importance": {
+      "coast": 150,
+      "start": "3d",
+      "renewal": "3d",
+      "expiresInfo": "1d"
+    },
+    "minimumPlayTime": "10h",
+    "deathsDelay": "1h",
+    "killMoneyPercentage": 5
+  }
+}
