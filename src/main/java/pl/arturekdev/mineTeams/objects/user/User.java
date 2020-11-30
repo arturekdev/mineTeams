@@ -20,6 +20,11 @@ public class User {
     private int kills;
     private int deaths;
 
+    public User(UUID uuid) {
+        this.uuid = uuid;
+        UserUtil.getUsers().add(this);
+    }
+
     public Player getPlayer() {
         return Bukkit.getOfflinePlayer(uuid).getPlayer();
     }

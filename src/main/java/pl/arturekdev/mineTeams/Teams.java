@@ -9,7 +9,8 @@ import pl.arturekdev.mineTeams.listeners.AsyncPlayerChatListener;
 import pl.arturekdev.mineTeams.listeners.EntityDamageByEntityListener;
 import pl.arturekdev.mineTeams.listeners.PlayerDeathListener;
 import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.placeholder.PlaceholderExpansionTools;
+import pl.arturekdev.mineTeams.placeholder.PlaceholderExpansionTeams;
+import pl.arturekdev.mineTeams.placeholder.PlaceholderExpansionUsers;
 import pl.arturekdev.mineTeams.runnable.TeamsGlowingUpdater;
 import pl.arturekdev.mineTeams.runnable.TeamsImportanceRunnable;
 
@@ -44,7 +45,8 @@ public final class Teams extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimer(this, new TeamsImportanceRunnable(), 20, 20);
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            new PlaceholderExpansionTools().register();
+            new PlaceholderExpansionTeams().register();
+            new PlaceholderExpansionUsers().register();
         }
 
     }
