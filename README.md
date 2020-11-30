@@ -7,6 +7,3 @@ mineTeams is a plugin that adds a powerful team system that allows players to co
 ```bash
 clean package
 ```
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
