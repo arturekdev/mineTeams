@@ -13,19 +13,18 @@ import java.util.UUID;
 
 public class KickCommand extends SubCommand {
 
-    public KickCommand(Player player, String[] args) {
-        super(player, args);
+    public KickCommand() {
+        super("kick");
     }
 
     @Override
-    public void run() {
-
-        if (args.length != 1) {
+    public void handleCommand(Player player, String[] arguments) {
+        if (arguments.length != 1) {
             MessageUtil.sendMessage(player, Messages.get("usageKick", " &8>> &cPoprawne użycie: &e/team kick <nick>"));
             return;
         }
 
-        UUID victimUUID = Bukkit.getPlayerUniqueId(args[0]);
+        UUID victimUUID = Bukkit.getPlayerUniqueId(arguments[0]);
 
         if (victimUUID == null) {
             MessageUtil.sendMessage(player, Messages.get("uuidNull", " &8>> &cBrak takiego gracza w bazie danych!"));

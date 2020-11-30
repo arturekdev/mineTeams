@@ -10,19 +10,18 @@ import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
 public class JoinCommand extends SubCommand {
 
-    public JoinCommand(Player player, String[] args) {
-        super(player, args);
+    public JoinCommand() {
+        super("join");
     }
 
     @Override
-    public void run() {
-
-        if (args.length != 1) {
+    public void handleCommand(Player player, String[] arguments) {
+        if (arguments.length != 1) {
             MessageUtil.sendMessage(player, Messages.get("usageJoin", " &8>> &cPoprawne użycie: &e/team join <tag>"));
             return;
         }
 
-        Team team = TeamUtil.getTeam(args[0]);
+        Team team = TeamUtil.getTeam(arguments[0]);
 
         if (team == null) {
             MessageUtil.sendMessage(player, Messages.get("teamIsNull", " &8>> &cNie ma takiego zespołu!"));

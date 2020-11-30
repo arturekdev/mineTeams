@@ -7,15 +7,16 @@ import pl.arturekdev.mineTeams.objects.team.Team;
 import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
+import java.util.Arrays;
+
 public class PvpCommand extends SubCommand {
 
-    public PvpCommand(Player player, String[] args) {
-        super(player, args);
+    public PvpCommand() {
+        super("pvp", Arrays.asList("ff", "friendlyfire"));
     }
 
     @Override
-    public void run() {
-
+    public void handleCommand(Player player, String[] arguments) {
         Team team = TeamUtil.getTeam(player);
 
         if (team == null) {

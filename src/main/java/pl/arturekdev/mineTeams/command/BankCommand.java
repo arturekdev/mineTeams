@@ -10,13 +10,12 @@ import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
 public class BankCommand extends SubCommand {
 
-    public BankCommand(Player player, String[] args) {
-        super(player, args);
+    public BankCommand() {
+        super("bank");
     }
 
     @Override
-    public void run() {
-
+    public void handleCommand(Player player, String[] arguments) {
         Team team = TeamUtil.getTeam(player);
 
         if (team == null) {
@@ -24,7 +23,7 @@ public class BankCommand extends SubCommand {
             return;
         }
 
-        if (args.length != 3) {
+        if (arguments.length != 3) {
             MessageUtil.sendMessage(player, Messages.get("teamBalance", " &8>> &aBank zespołu aktualnie posiada: &e%balance% Iskier").replace("%balance%", String.valueOf(team.getBank())));
             MessageUtil.sendMessage(player, Messages.get("usageBank", " &8>> &cPoprawne użycie: &e/team bank <withdraw/deposit> <ilość>"));
             return;
@@ -33,7 +32,7 @@ public class BankCommand extends SubCommand {
         int value;
 
         try {
-            value = Integer.parseInt(args[2]);
+            value = Integer.parseInt(arguments[2]);
         } catch (Exception e) {
             MessageUtil.sendMessage(player, Messages.get("argumentIsNotNumber", " &8>> &cIlość musi być liczbą!"));
             return;
@@ -41,8 +40,7 @@ public class BankCommand extends SubCommand {
 
         EconomyService economyService = new EconomyService();
 
-        if (args[1].equalsIgnoreCase("withdraw")) {
-
+        if (arguments[1].equalsIgnoreCase("withdraw")) {
             if (!team.getOwner().equals(player.getUniqueId())) {
                 MessageUtil.sendMessage(player, Messages.get("youNeedBeOwner", " &8>> &cMusisz być właścicielem!"));
                 return;
@@ -52,7 +50,7 @@ public class BankCommand extends SubCommand {
                 return;
             }
 
-            if (!(team.getBank() >= value)) {
+            if (team.getBank() < value) {
                 MessageUtil.sendMessage(player, Messages.get("tooLittleBankMoney", " &8>> &cTwój zespół nie posiada takiej kwoty w banku!"));
                 return;
             }
@@ -61,8 +59,7 @@ public class BankCommand extends SubCommand {
             economyService.giveMoney(player, value);
 
             MessageUtil.sendMessage(player, Messages.get("successWithdrawBankMoney", " &8>> &aPomyślnie wypłaciłeś &e%value% Iskier &az banku swojego zespołu!").replace("%value%", String.valueOf(value)));
-        } else if (args[1].equalsIgnoreCase("deposit")) {
-
+        } else if (arguments[1].equalsIgnoreCase("deposit")) {
             if (!economyService.has(player, value)) {
                 MessageUtil.sendMessage(player, Messages.get("youDontHaveThatAmount", " &8>> &cNie posiadasz takiej ilości iskier"));
                 return;

@@ -2,7 +2,6 @@ package pl.arturekdev.mineTeams.command;
 
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import pl.arturekdev.mineTeams.Teams;
@@ -14,13 +13,12 @@ import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
 public class VaultCommand extends SubCommand {
 
-    public VaultCommand(Player player, String[] args) {
-        super(player, args);
+    public VaultCommand() {
+        super("vault");
     }
 
     @Override
-    public void run() {
-
+    public void handleCommand(Player player, String[] arguments) {
         JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
 
         Team team = TeamUtil.getTeam(player);
@@ -30,7 +28,7 @@ public class VaultCommand extends SubCommand {
             return;
         }
 
-        if (args.length != 2) {
+        if (arguments.length != 2) {
             player.openInventory(team.getVault());
             if (team.getVaultSize() < 6) {
                 MessageUtil.sendMessage(player, Messages.get("canUpgradeVaultInformation", " &8>> &aMożesz powiększyć swój skarbiec komendą &e/team vault upgrade"));
@@ -38,7 +36,7 @@ public class VaultCommand extends SubCommand {
             return;
         }
 
-        if (!args[1].equalsIgnoreCase("upgrade")) {
+        if (!arguments[1].equalsIgnoreCase("upgrade")) {
             MessageUtil.sendMessage(player, Messages.get("usageVaultUpgrade", " &8>> &cPoprawne użycie: &e/team vault upgrade"));
         }
 

@@ -15,16 +15,15 @@ import java.util.HashSet;
 
 public class CreateCommand extends SubCommand {
 
-    public CreateCommand(Player player, String[] args) {
-        super(player, args);
+    public CreateCommand() {
+        super("create");
     }
 
     @Override
-    public void run() {
-
+    public void handleCommand(Player player, String[] arguments) {
         JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
 
-        if (args.length != 1) {
+        if (arguments.length != 1) {
             MessageUtil.sendMessage(player, Messages.get("usageCreate", " &8>> &cPoprawne użycie: &e/team create <TAG>"));
             return;
         }
@@ -34,7 +33,7 @@ public class CreateCommand extends SubCommand {
             return;
         }
 
-        String tag = args[0];
+        String tag = arguments[0];
 
         if (tag.length() > config.get("maxCharsTag").getAsInt()) {
             MessageUtil.sendMessage(player, Messages.get("maxChars", " &8>> &cTag może mieć maksymalnie 5 znaków!"));

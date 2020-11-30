@@ -1,6 +1,5 @@
 package pl.arturekdev.mineTeams.command;
 
-import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,26 +7,36 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
-import pl.arturekdev.mineTeams.Teams;
+import pl.arturekdev.mineTeams.command.util.SubCommand;
 import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.objects.team.Team;
 import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class TeamsCommand implements CommandExecutor, TabCompleter {
 
+    private final List<SubCommand> subCommands;
+
+    public TeamsCommand() {
+        this.subCommands = new ArrayList<>();
+        this.subCommands.add(new BankCommand());
+        this.subCommands.add(new CreateCommand());
+        this.subCommands.add(new DeleteCommand());
+        this.subCommands.add(new InfoCommand());
+        this.subCommands.add(new InviteCommand());
+        this.subCommands.add(new JoinCommand());
+        this.subCommands.add(new KickCommand());
+        this.subCommands.add(new LeaveCommand());
+        this.subCommands.add(new PvpCommand());
+        this.subCommands.add(new SlotsCommand());
+        this.subCommands.add(new VaultCommand());
+    }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
-
-        if (args.length == 0) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] arguments) {
+        if (arguments.length == 0) {
             for (String usageMain : Messages.getList("usageMain", " &8>> &6/team create <TAG> &7- Tworzenie nowego zespołu ; &8>> &6/team delete &7- Usuwanie zespołu ; &8>> &6/team invite <nick> &7- Zapraszanie gracza do zespołu ; &8>> &6/team join <TAG> &7- Dołączanie do zespołu ; &8>> &6/team kick <nick> &7- Wyrzucanie gracza z zespołu ; &8>> &6/team info [TAG] &7- Informacje o zespole")) {
                 MessageUtil.sendMessage(sender, usageMain);
             }
@@ -36,46 +45,23 @@ public class TeamsCommand implements CommandExecutor, TabCompleter {
 
         Player player = (Player) sender;
 
-        switch (args[0]) {
-            case "create":
-                new CreateCommand(player, args).run();
-                return false;
-            case "delete":
-                new DeleteCommand(player, args).run();
-                return false;
-            case "invite":
-                new InviteCommand(player, args).run();
-                return false;
-            case "join":
-                new JoinCommand(player, args).run();
-                return false;
-            case "kick":
-                new KickCommand(player, args).run();
-                return false;
-            case "leave":
-                new LeaveCommand(player, args).run();
-                return false;
-            case "pvp":
-                new PvpCommand(player, args).run();
-                return false;
-            case "bank":
-                new BankCommand(player, args).run();
-                return false;
-            case "vault":
-                new VaultCommand(player, args).run();
-                return false;
-            case "slots":
-                new SlotsCommand(player, args).run();
-                return false;
-            case "info":
-                new InfoCommand(player, args).run();
-                return false;
-            default:
-                for (String usageMain : Messages.getList("usageMain", " &8>> &6/team create <TAG> &7- Tworzenie nowego zespołu ; &8>> &6/team delete &7- Usuwanie zespołu ; &8>> &6/team invite <nick> &7- Zapraszanie gracza do zespołu ; &8>> &6/team join <TAG> &7- Dołączanie do zespołu ; &8>> &6/team kick <nick> &7- Wyrzucanie gracza z zespołu ; &8>> &6/team info [TAG] &7- Informacje o zespole")) {
-                    MessageUtil.sendMessage(sender, usageMain);
-                }
+        Optional<SubCommand> optionalSubCommand = getSubCommand(arguments[0]);
+        if (optionalSubCommand.isPresent()) {
+            SubCommand subCommand = optionalSubCommand.get();
+            subCommand.handleCommand(player, Arrays.copyOfRange(arguments, 1, arguments.length));
+        } else {
+            for (String usageMain : Messages.getList("usageMain", " &8>> &6/team create <TAG> &7- Tworzenie nowego zespołu ; &8>> &6/team delete &7- Usuwanie zespołu ; &8>> &6/team invite <nick> &7- Zapraszanie gracza do zespołu ; &8>> &6/team join <TAG> &7- Dołączanie do zespołu ; &8>> &6/team kick <nick> &7- Wyrzucanie gracza z zespołu ; &8>> &6/team info [TAG] &7- Informacje o zespole")) {
+                MessageUtil.sendMessage(sender, usageMain);
+            }
         }
+
         return false;
+    }
+
+    public Optional<SubCommand> getSubCommand(String name) {
+        return subCommands.stream()
+                .filter(subCommand -> subCommand.getName().equalsIgnoreCase(name) || subCommand.getAliases().contains(name))
+                .findAny();
     }
 
     @Override
@@ -157,11 +143,11 @@ public class TeamsCommand implements CommandExecutor, TabCompleter {
             Team team = TeamUtil.getTeam(player);
 
             if (team == null) {
-                return null;
+                return Collections.emptyList();
             }
 
             if (!team.getOwner().equals(player.getUniqueId())) {
-                return null;
+                return Collections.emptyList();
             }
 
             for (UUID member : team.getMembers()) {
@@ -175,6 +161,6 @@ public class TeamsCommand implements CommandExecutor, TabCompleter {
         }
 
 
-        return null;
+        return Collections.emptyList();
     }
 }
