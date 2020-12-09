@@ -13,6 +13,13 @@ public class UserUtil {
     }
 
     public static User getUser(UUID uuid) {
-        return users.stream().filter(user -> user.getUuid().equals(uuid)).findFirst().orElse(new User(uuid));
+        for (User user : users) {
+            if (user.getUuid().equals(uuid)) {
+                return user;
+            }
+        }
+        User user = new User();
+        users.add(user);
+        return user;
     }
 }

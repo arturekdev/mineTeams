@@ -22,7 +22,6 @@ public class User {
 
     public User(UUID uuid) {
         this.uuid = uuid;
-        UserUtil.getUsers().add(this);
     }
 
     public Player getPlayer() {

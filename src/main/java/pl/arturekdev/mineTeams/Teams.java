@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.arturekdev.mineTeams.command.TeamsCommand;
 import pl.arturekdev.mineTeams.configuration.Config;
+import pl.arturekdev.mineTeams.database.DatabaseConnector;
 import pl.arturekdev.mineTeams.listeners.AsyncPlayerChatListener;
 import pl.arturekdev.mineTeams.listeners.EntityDamageByEntityListener;
 import pl.arturekdev.mineTeams.listeners.PlayerDeathListener;
@@ -20,6 +21,7 @@ import java.io.File;
 public final class Teams extends JavaPlugin {
 
     private static Teams instance;
+    private static DatabaseConnector databaseConnector;
     private Config configuration;
 
     public static Teams getInstance() {
@@ -36,6 +38,10 @@ public final class Teams extends JavaPlugin {
 
         Messages messages = new Messages(this);
         messages.loadMessages();
+
+        databaseConnector = new DatabaseConnector();
+        databaseConnector.prepareCollectionTeams();
+        databaseConnector.prepareCollectionUsers();
 
         getCommand("team").setExecutor(new TeamsCommand());
         getCommand("team").setTabCompleter(new TeamsCommand());

@@ -56,8 +56,8 @@ public class InfoCommand extends SubCommand {
                 string = string.replace("%members%", members.toString());
                 string = string.replace("%created%", TimeUtil.formatDate(team.getCreated()));
                 string = string.replace("%importance%", TimeUtil.formatDate(team.getImportance()));
-                string = string.replace("%kills%", String.valueOf(team.getKills()));
-                string = string.replace("%deaths%", String.valueOf(team.getDeaths()));
+                string = string.replace("%kills%", String.valueOf(team.getStats().getKills()));
+                string = string.replace("%deaths%", String.valueOf(team.getStats().getDeaths()));
                 string = string.replace("%slots%", String.valueOf(team.getSlots()));
                 string = string.replace("%membersSize%", String.valueOf(team.getMembers().size()));
                 MessageUtil.sendMessage(player, string);
@@ -98,8 +98,8 @@ public class InfoCommand extends SubCommand {
                 string = string.replace("%members%", members.toString());
                 string = string.replace("%created%", TimeUtil.formatDate(team.getCreated()));
                 string = string.replace("%importance%", TimeUtil.formatDate(team.getImportance()));
-                string = string.replace("%kills%", String.valueOf(team.getKills()));
-                string = string.replace("%deaths%", String.valueOf(team.getDeaths()));
+                string = string.replace("%kills%", String.valueOf(team.getStats().getKills()));
+                string = string.replace("%deaths%", String.valueOf(team.getStats().getDeaths()));
                 string = string.replace("%slots%", String.valueOf(team.getSlots()));
                 string = string.replace("%membersSize%", String.valueOf(team.getMembers().size()));
                 MessageUtil.sendMessage(player, string);

@@ -7,6 +7,7 @@ import pl.arturekdev.mineTeams.Teams;
 import pl.arturekdev.mineTeams.command.util.SubCommand;
 import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.objects.team.Team;
+import pl.arturekdev.mineTeams.objects.team.TeamStats;
 import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 import pl.arturekdev.mineUtiles.utils.TimeUtil;
@@ -54,9 +55,7 @@ public class CreateCommand extends SubCommand {
                 .glowing(false)
                 .importance(System.currentTimeMillis() + TimeUtil.timeFromString(config.get("importance").getAsJsonObject().get("start").getAsString()))
                 .created(System.currentTimeMillis())
-                .bank(0)
-                .kills(0)
-                .deaths(0)
+                .stats(new TeamStats(0, 0, 0))
                 .vaultSize(config.get("vaultStartSize").getAsInt())
                 .slots(config.get("slotsStart").getAsInt())
                 .vault(Bukkit.createInventory(null, 9 * config.get("vaultStartSize").getAsInt(), Messages.get("vaultTitleGUI", "&6Skarbiec twojego zespołu")))

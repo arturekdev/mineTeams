@@ -45,7 +45,7 @@ public class VaultCommand extends SubCommand {
             return;
         }
 
-        if (team.getBank() < config.get("vaultUpgradeCoast").getAsInt()) {
+        if (team.getStats().getBank() < config.get("vaultUpgradeCoast").getAsInt()) {
             MessageUtil.sendMessage(player, Messages.get("bankDosntHasMoney", " &8>> &cBank twojego zespołu nie ma wystarczająco pieniędzy!"));
             return;
         }

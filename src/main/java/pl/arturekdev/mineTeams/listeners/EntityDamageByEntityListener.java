@@ -45,7 +45,7 @@ public class EntityDamageByEntityListener implements Listener {
                     return;
                 }
 
-                if (!victimTeam.isOnTeam(damager)) {
+                if (victimTeam.isNotOnTeam(damager)) {
                     return;
                 }
 
@@ -66,7 +66,7 @@ public class EntityDamageByEntityListener implements Listener {
                 return;
             }
 
-            if (!victimTeam.isOnTeam(damager)) {
+            if (victimTeam.isNotOnTeam(damager)) {
                 return;
             }
 

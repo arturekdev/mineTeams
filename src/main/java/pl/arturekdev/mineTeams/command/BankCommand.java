@@ -24,7 +24,7 @@ public class BankCommand extends SubCommand {
         }
 
         if (arguments.length != 3) {
-            MessageUtil.sendMessage(player, Messages.get("teamBalance", " &8>> &aBank zespołu aktualnie posiada: &e%balance% Iskier").replace("%balance%", String.valueOf(team.getBank())));
+            MessageUtil.sendMessage(player, Messages.get("teamBalance", " &8>> &aBank zespołu aktualnie posiada: &e%balance% Iskier").replace("%balance%", String.valueOf(team.getStats().getBank())));
             MessageUtil.sendMessage(player, Messages.get("usageBank", " &8>> &cPoprawne użycie: &e/team bank <withdraw/deposit> <ilość>"));
             return;
         }
@@ -50,12 +50,12 @@ public class BankCommand extends SubCommand {
                 return;
             }
 
-            if (team.getBank() < value) {
+            if (team.getStats().getBank() < value) {
                 MessageUtil.sendMessage(player, Messages.get("tooLittleBankMoney", " &8>> &cTwój zespół nie posiada takiej kwoty w banku!"));
                 return;
             }
 
-            team.setBank(team.getBank() - value);
+            team.getStats().setBank(team.getStats().getBank() - value);
             economyService.giveMoney(player, value);
 
             MessageUtil.sendMessage(player, Messages.get("successWithdrawBankMoney", " &8>> &aPomyślnie wypłaciłeś &e%value% Iskier &az banku swojego zespołu!").replace("%value%", String.valueOf(value)));
@@ -65,7 +65,7 @@ public class BankCommand extends SubCommand {
                 return;
             }
 
-            team.setBank(team.getBank() + value);
+            team.getStats().setBank(team.getStats().getBank() - value);
             economyService.takeMoney(player, value);
 
             MessageUtil.sendMessage(player, Messages.get("successDepositBankMoney", " &8>> &aPomyślnie wypłaciłeś &e%value% Iskier &ado banku swojego zespołu!").replace("%value%", String.valueOf(value)));

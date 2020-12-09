@@ -47,11 +47,11 @@ public class PlayerDeathListener implements Listener {
         Team killerTeam = TeamUtil.getTeam(killer);
 
         if (victimTeam != null) {
-            victimTeam.setDeaths(victimTeam.getDeaths() + 1);
+            victimTeam.getStats().setDeaths(victimTeam.getStats().getDeaths() + 1);
         }
 
         if (killerTeam != null) {
-            killerTeam.setKills(killerTeam.getKills() + 1);
+            killerTeam.getStats().setKills(killerTeam.getStats().getKills() + 1);
         }
 
         EconomyService economyService = new EconomyService();
