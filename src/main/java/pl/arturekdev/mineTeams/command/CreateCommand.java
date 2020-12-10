@@ -5,19 +5,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import pl.arturekdev.mineTeams.Teams;
 import pl.arturekdev.mineTeams.command.util.SubCommand;
+import pl.arturekdev.mineTeams.configuration.Config;
 import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.objects.team.Team;
-import pl.arturekdev.mineTeams.objects.team.TeamStats;
 import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
-import pl.arturekdev.mineUtiles.utils.TimeUtil;
-
-import java.util.HashSet;
 
 public class CreateCommand extends SubCommand {
 
-    public CreateCommand() {
+    private final Config configuration;
+
+    public CreateCommand(Config configuration) {
         super("create");
+        this.configuration = configuration;
     }
 
     @Override
@@ -41,26 +41,12 @@ public class CreateCommand extends SubCommand {
             return;
         }
 
-        Team team = TeamUtil.getTeam(tag);
-
-        if (team != null) {
+        if (TeamUtil.getTeam(tag) != null) {
             MessageUtil.sendMessage(player, Messages.get("tagBusy", " &8>> &cPodany TAG jest już zajęty!"));
             return;
         }
 
-        team = Team.builder()
-                .tag(tag)
-                .owner(player.getUniqueId())
-                .pvp(false)
-                .glowing(false)
-                .importance(System.currentTimeMillis() + TimeUtil.timeFromString(config.get("importance").getAsJsonObject().get("start").getAsString()))
-                .created(System.currentTimeMillis())
-                .stats(new TeamStats(0, 0, 0))
-                .vaultSize(config.get("vaultStartSize").getAsInt())
-                .slots(config.get("slotsStart").getAsInt())
-                .vault(Bukkit.createInventory(null, 9 * config.get("vaultStartSize").getAsInt(), Messages.get("vaultTitleGUI", "&6Skarbiec twojego zespołu")))
-                .members(new HashSet<>())
-                .build();
+        Team team = new Team(tag, player.getUniqueId(), configuration);
 
         TeamUtil.getTeams().add(team);
 

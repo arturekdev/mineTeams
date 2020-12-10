@@ -49,6 +49,7 @@ public class SlotsCommand extends SubCommand {
         }
 
         team.setSlots(team.getSlots() + 1);
+        team.setNeedUpdate(true);
 
         MessageUtil.sendMessage(player, Messages.get("successUpgradeSlots", " &8>> &aPomyślnie powiększyłeś ilość slotów!"));
 

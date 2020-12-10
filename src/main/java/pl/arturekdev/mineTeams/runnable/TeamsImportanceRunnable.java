@@ -3,8 +3,8 @@ package pl.arturekdev.mineTeams.runnable;
 import com.google.gson.JsonObject;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.Teams;
+import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.objects.team.Team;
 import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
@@ -22,15 +22,15 @@ public class TeamsImportanceRunnable implements Runnable {
 
                 long difference = team.getImportance() - System.currentTimeMillis();
 
-                if (difference <= TimeUtil.timeFromString(config.get("importance").getAsJsonObject().get("expiresInfo").getAsString()) && team.getBank() < config.get("importance").getAsJsonObject().get("coast").getAsInt()) {
+                if (difference <= TimeUtil.timeFromString(config.get("importance").getAsJsonObject().get("expiresInfo").getAsString()) && team.getStats().getBank() < config.get("importance").getAsJsonObject().get("coast").getAsInt()) {
                     team.onlinePlayers().forEach(player -> player.sendActionBar(new TextComponent(MessageUtil.fixColor(Messages.get("teamImportanceAlert", "&cTwój zespoł niedługo wygaśnie! Wpłać do banku zespołu wymaganą kwote!")))));
                 }
 
                 continue;
             }
 
-            if (team.getBank() >= config.get("importance").getAsJsonObject().get("coast").getAsInt()) {
-                team.setBank(team.getBank() - config.get("importance").getAsJsonObject().get("coast").getAsInt());
+            if (team.getStats().getBank() >= config.get("importance").getAsJsonObject().get("coast").getAsInt()) {
+                team.getStats().setBank(team.getStats().getBank() - config.get("importance").getAsJsonObject().get("coast").getAsInt());
                 team.setImportance(team.getImportance() + TimeUtil.timeFromString(config.get("importance").getAsJsonObject().get("renewal").getAsString()));
                 continue;
             }

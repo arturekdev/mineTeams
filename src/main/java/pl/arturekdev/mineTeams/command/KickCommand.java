@@ -50,6 +50,7 @@ public class KickCommand extends SubCommand {
 
         team.getMembers().remove(victimUUID);
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(victimUUID);
+        team.setNeedUpdate(true);
 
         MessageUtil.sendMessage(player, Messages.get("successKick", " &8>> &aPomyślnie wyrzuciłeś &e%player% &aze swojego zespołu!").replace("%player%", offlinePlayer.getName()));
         Bukkit.broadcastMessage(MessageUtil.fixColor(Messages.get("successJoinBroadcast", " &6&lZespoły &8>> &e%player% &czostał wyrzucony z zespołu &e%tag%").replace("%player%", offlinePlayer.getName()).replace("%tag%", team.getTag())));

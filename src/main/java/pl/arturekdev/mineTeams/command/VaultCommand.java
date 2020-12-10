@@ -56,6 +56,7 @@ public class VaultCommand extends SubCommand {
         Inventory inventory = Bukkit.createInventory(null, 9 * team.getVaultSize(), Messages.get("vaultTitleGUI", "&6Skarbiec twojego zespołu"));
         inventory.setContents(team.getVault().getContents());
         team.setVault(inventory);
+        team.setNeedUpdate(true);
 
         MessageUtil.sendMessage(player, Messages.get("successUpgradeVault", " &8>> &aPomyślnie ulepszyłeś skarbiec swojego zespołu!"));
 

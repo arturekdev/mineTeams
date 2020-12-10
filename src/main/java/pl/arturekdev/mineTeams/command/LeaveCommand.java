@@ -29,6 +29,7 @@ public class LeaveCommand extends SubCommand {
         }
 
         team.getMembers().remove(player.getUniqueId());
+        team.setNeedUpdate(true);
 
         MessageUtil.sendMessage(player, Messages.get("successLeave", " &8>> &aPomyślnie opuściłeś zespoł &e%tag%").replace("%tag%", team.getTag()));
         Bukkit.broadcastMessage(MessageUtil.fixColor(Messages.get("successLeaveBroadcast", " &6&lZespoły &8>> &e%player% &copóścił zespół &e%tag%").replace("%player%", player.getName()).replace("%tag%", team.getTag())));

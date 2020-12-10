@@ -41,15 +41,15 @@ public class PlaceholderExpansionTeams extends PlaceholderExpansion {
         }
 
         if (identifier.equalsIgnoreCase("team_kills")) {
-            return team == null ? "0" : String.valueOf(team.getKills());
+            return team == null ? "0" : String.valueOf(team.getStats().getKills());
         }
 
         if (identifier.equalsIgnoreCase("team_deaths")) {
-            return team == null ? "0" : String.valueOf(team.getDeaths());
+            return team == null ? "0" : String.valueOf(team.getStats().getDeaths());
         }
 
         if (identifier.equalsIgnoreCase("team_kd")) {
-            return team == null ? "0" : String.valueOf(team.getKills() / team.getDeaths());
+            return team == null ? "0" : String.valueOf(team.getStats().getKills() / team.getStats().getDeaths());
         }
 
         return null;

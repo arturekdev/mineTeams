@@ -36,5 +36,6 @@ public class PvpCommand extends SubCommand {
             team.setPvp(true);
             MessageUtil.sendMessage(player, Messages.get("successEnablePvp", " &8>> &aAtakowanie się miedzy członkami zespołu zostało &2włączone"));
         }
+        team.setNeedUpdate(true);
     }
 }

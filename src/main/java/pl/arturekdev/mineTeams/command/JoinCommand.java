@@ -35,6 +35,7 @@ public class JoinCommand extends SubCommand {
 
         team.getMembers().add(player.getUniqueId());
         team.getInvites().remove(player);
+        team.setNeedUpdate(true);
 
         MessageUtil.sendMessage(player, Messages.get("successJoin", " &8>> &aPomyślnie dołączyłeś do zespołu &e%tag%").replace("%tag%", team.getTag()));
         Bukkit.broadcastMessage(MessageUtil.fixColor(Messages.get("successJoinBroadcast", " &6&lZespoły &8>> &e%player% &adołączył do zespołu &e%tag%").replace("%player%", player.getName()).replace("%tag%", team.getTag())));

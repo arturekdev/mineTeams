@@ -49,7 +49,7 @@ public class DatabaseConnector {
         stringBuilder.append("`vaultSize` int not null,");
         stringBuilder.append("`slots` int not null,");
         stringBuilder.append("`vault` text not null,");
-        stringBuilder.append("primary key (nick));");
+        stringBuilder.append("primary key (tag));");
 
         statement.executeUpdate(stringBuilder.toString());
     }
@@ -60,10 +60,10 @@ public class DatabaseConnector {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("create table if not exists `mineTeamsUsers`(");
-        stringBuilder.append("`uuid` varchar(32) not null,");
+        stringBuilder.append("`uuid` varchar(64) not null,");
         stringBuilder.append("`kills` json not null,");
         stringBuilder.append("`deaths` json not null,");
-        stringBuilder.append("primary key (nick));");
+        stringBuilder.append("primary key (uuid));");
 
         statement.executeUpdate(stringBuilder.toString());
     }

@@ -1,28 +1,26 @@
 package pl.arturekdev.mineTeams.objects.team;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import pl.arturekdev.mineTeams.configuration.Config;
 import pl.arturekdev.mineTeams.database.DatabaseConnector;
 import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.util.ItemSerializer;
+import pl.arturekdev.mineUtiles.utils.TimeUtil;
 
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
-@Builder
 public class Team {
 
     private String tag;
@@ -55,6 +53,22 @@ public class Team {
         this.slots = resultSet.getInt("slots");
         this.vault = Bukkit.createInventory(null, 9 * this.vaultSize, Messages.get("vaultTitleGUI", "&6Skarbiec twojego zespołu"));
         this.vault.setContents(ItemSerializer.itemStackArrayFromBase64(resultSet.getString("vault")));
+        this.needUpdate = true;
+    }
+
+    public Team(String tag, UUID owner, Config config) {
+        this.tag = tag;
+        this.owner = owner;
+        this.created = System.currentTimeMillis();
+        JsonObject configuration = config.getElement("configuration").getAsJsonObject();
+        this.importance = System.currentTimeMillis() + TimeUtil.timeFromString(configuration.get("importance").getAsJsonObject().get("start").getAsString());
+        this.members = new HashSet<>();
+        this.pvp = false;
+        this.glowing = false;
+        this.stats = new TeamStats();
+        this.vaultSize = configuration.get("vaultStartSize").getAsInt();
+        this.slots = configuration.get("slotsStart").getAsInt();
+        this.vault = Bukkit.createInventory(null, 9 * this.vaultSize, Messages.get("vaultTitleGUI", "&6Skarbiec twojego zespołu"));
         this.needUpdate = true;
     }
 

@@ -8,6 +8,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import pl.arturekdev.mineTeams.command.util.SubCommand;
+import pl.arturekdev.mineTeams.configuration.Config;
+import pl.arturekdev.mineTeams.database.DatabaseConnector;
 import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.objects.team.Team;
 import pl.arturekdev.mineTeams.objects.team.TeamUtil;
@@ -19,11 +21,11 @@ public class TeamsCommand implements CommandExecutor, TabCompleter {
 
     private final List<SubCommand> subCommands;
 
-    public TeamsCommand() {
+    public TeamsCommand(DatabaseConnector databaseConnector, Config configuration) {
         this.subCommands = new ArrayList<>();
         this.subCommands.add(new BankCommand());
-        this.subCommands.add(new CreateCommand());
-        this.subCommands.add(new DeleteCommand());
+        this.subCommands.add(new CreateCommand(configuration));
+        this.subCommands.add(new DeleteCommand(databaseConnector));
         this.subCommands.add(new InfoCommand());
         this.subCommands.add(new InviteCommand());
         this.subCommands.add(new JoinCommand());

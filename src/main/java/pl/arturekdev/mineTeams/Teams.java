@@ -43,8 +43,8 @@ public final class Teams extends JavaPlugin {
         databaseConnector.prepareCollectionTeams();
         databaseConnector.prepareCollectionUsers();
 
-        getCommand("team").setExecutor(new TeamsCommand());
-        getCommand("team").setTabCompleter(new TeamsCommand());
+        getCommand("team").setExecutor(new TeamsCommand(databaseConnector, configuration));
+        getCommand("team").setTabCompleter(new TeamsCommand(databaseConnector, configuration));
 
         Bukkit.getPluginManager().registerEvents(new EntityDamageByEntityListener(), this);
         Bukkit.getPluginManager().registerEvents(new AsyncPlayerChatListener(), this);

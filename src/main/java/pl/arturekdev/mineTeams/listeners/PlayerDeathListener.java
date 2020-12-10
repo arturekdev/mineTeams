@@ -42,7 +42,6 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-
         Team victimTeam = TeamUtil.getTeam(victim);
         Team killerTeam = TeamUtil.getTeam(killer);
 
@@ -67,6 +66,13 @@ public class PlayerDeathListener implements Listener {
                 .replace("%killer%", killer.getName())
                 .replace("%money%", String.valueOf(money))));
 
+        if (victimTeam != null) {
+            victimTeam.setNeedUpdate(true);
+        }
+
+        if (killerTeam != null) {
+            killerTeam.setNeedUpdate(true);
+        }
     }
 
 }
