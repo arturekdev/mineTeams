@@ -19,14 +19,19 @@ import pl.arturekdev.mineUtiles.utils.TimeUtil;
 public class PlayerDeathListener implements Listener {
 
     @EventHandler
-    public void event(PlayerDeathEvent e) {
-        Player victim = e.getEntity();
-        Player killer = e.getEntity().getKiller();
-        User user = UserUtil.getUser(victim.getUniqueId());
+    public void event(PlayerDeathEvent event) {
+
+        event.setDeathMessage("");
+
+        Player victim = event.getEntity();
+        Player killer = event.getEntity().getKiller();
 
         if (killer == null) {
             return;
         }
+
+        User victimUser = UserUtil.getUser(victim.getUniqueId());
+        User killerUser = UserUtil.getUser(killer.getUniqueId());
 
         JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
 
@@ -37,7 +42,7 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        if (user.getLastDeath() < System.currentTimeMillis() + TimeUtil.timeFromString(config.get("deathsDelay").getAsString())) {
+        if (victimUser.getLastDeath() > System.currentTimeMillis() + TimeUtil.timeFromString(config.get("deathsDelay").getAsString())) {
             MessageUtil.sendMessage(killer, Messages.get("lastHourKilled", " &8>> &cGracz, którego zabiłeś, został już zabity w ciągu godziny, więc nie otrzymujesz za niego nagrody!"));
             return;
         }
@@ -45,16 +50,28 @@ public class PlayerDeathListener implements Listener {
         Team victimTeam = TeamUtil.getTeam(victim);
         Team killerTeam = TeamUtil.getTeam(killer);
 
+        if (killerTeam == victimTeam) {
+            MessageUtil.sendMessage(killer, Messages.get("sameTeamPlayer", " &8>> &cZabijąc swojego członka zespołu nie zmienią się statystyki!"));
+            return;
+        }
+
         if (victimTeam != null) {
             victimTeam.getStats().setDeaths(victimTeam.getStats().getDeaths() + 1);
+            victimTeam.setNeedUpdate(true);
         }
 
         if (killerTeam != null) {
             killerTeam.getStats().setKills(killerTeam.getStats().getKills() + 1);
+            killerTeam.setNeedUpdate(true);
         }
 
         EconomyService economyService = new EconomyService();
         int money = economyService.getMoney(victim) / 100 * config.get("killMoneyPercentage").getAsInt();
+
+        killerUser.setKills(killerUser.getKills() + 1);
+        victimUser.setDeaths(victimUser.getDeaths() + 1);
+        killerUser.setNeedUpdate(true);
+        victimUser.setNeedUpdate(true);
 
         economyService.takeMoney(victim, money);
         economyService.giveMoney(killer, money);
@@ -66,13 +83,6 @@ public class PlayerDeathListener implements Listener {
                 .replace("%killer%", killer.getName())
                 .replace("%money%", String.valueOf(money))));
 
-        if (victimTeam != null) {
-            victimTeam.setNeedUpdate(true);
-        }
-
-        if (killerTeam != null) {
-            killerTeam.setNeedUpdate(true);
-        }
     }
 
 }

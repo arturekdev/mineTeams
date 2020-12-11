@@ -10,7 +10,6 @@ import java.sql.Statement;
 
 public class DatabaseConnector {
 
-
     private final DatabaseService databaseService = new DatabaseService();
 
     public Connection getConnection() {
@@ -41,8 +40,8 @@ public class DatabaseConnector {
         stringBuilder.append("`created` long not null,");
         stringBuilder.append("`importance` long not null,");
         stringBuilder.append("`members` json not null,");
-        stringBuilder.append("`pvp` boolean not null,");
-        stringBuilder.append("`glowing` boolean not null,");
+        stringBuilder.append("`pvp` varchar(16) not null,");
+        stringBuilder.append("`glowing` varchar(16) not null,");
         stringBuilder.append("`kills` int not null,");
         stringBuilder.append("`deaths` int not null,");
         stringBuilder.append("`bank` int not null,");
@@ -61,8 +60,8 @@ public class DatabaseConnector {
 
         stringBuilder.append("create table if not exists `mineTeamsUsers`(");
         stringBuilder.append("`uuid` varchar(64) not null,");
-        stringBuilder.append("`kills` json not null,");
-        stringBuilder.append("`deaths` json not null,");
+        stringBuilder.append("`kills` int not null,");
+        stringBuilder.append("`deaths` int not null,");
         stringBuilder.append("primary key (uuid));");
 
         statement.executeUpdate(stringBuilder.toString());

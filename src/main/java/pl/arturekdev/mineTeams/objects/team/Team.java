@@ -53,6 +53,7 @@ public class Team {
         this.slots = resultSet.getInt("slots");
         this.vault = Bukkit.createInventory(null, 9 * this.vaultSize, Messages.get("vaultTitleGUI", "&6Skarbiec twojego zespołu"));
         this.vault.setContents(ItemSerializer.itemStackArrayFromBase64(resultSet.getString("vault")));
+        this.invites = new HashSet<>();
         this.needUpdate = true;
     }
 
@@ -69,6 +70,7 @@ public class Team {
         this.vaultSize = configuration.get("vaultStartSize").getAsInt();
         this.slots = configuration.get("slotsStart").getAsInt();
         this.vault = Bukkit.createInventory(null, 9 * this.vaultSize, Messages.get("vaultTitleGUI", "&6Skarbiec twojego zespołu"));
+        this.invites = new HashSet<>();
         this.needUpdate = true;
     }
 
@@ -97,7 +99,7 @@ public class Team {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("INSERT INTO mineTeamsTeams (tag, uuid, created, importance, members, pvp, glowing, kills, deaths, bank, vaultSize, slots, vault) VALUES (");
+        stringBuilder.append("INSERT INTO mineTeamsTeams (tag, owner, created, importance, members, pvp, glowing, kills, deaths, bank, vaultSize, slots, vault) VALUES (");
         stringBuilder.append("'").append(this.tag).append("',");
         stringBuilder.append("'").append(this.owner.toString()).append("',");
         stringBuilder.append("'").append(this.created).append("',");

@@ -1,5 +1,10 @@
 package pl.arturekdev.mineTeams.objects.user;
 
+import org.bukkit.Bukkit;
+import pl.arturekdev.mineTeams.database.DatabaseConnector;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -18,8 +23,22 @@ public class UserUtil {
                 return user;
             }
         }
-        User user = new User();
+        User user = new User(uuid);
         users.add(user);
         return user;
+    }
+
+    public void loadUsers(DatabaseConnector databaseConnector) {
+        try {
+            try (ResultSet rs = databaseConnector.executeQuery("SELECT * FROM mineTeamsUsers")) {
+                while (rs.next()) {
+                    User user = new User(rs);
+                    users.add(user);
+                }
+                Bukkit.getLogger().info(" Pomyślnie załadowano " + users.size() + " użytkowników.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

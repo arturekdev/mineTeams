@@ -1,7 +1,11 @@
 package pl.arturekdev.mineTeams.objects.team;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import pl.arturekdev.mineTeams.database.DatabaseConnector;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,6 +42,20 @@ public class TeamUtil {
             }
         }
         return false;
+    }
+
+    public void loadTeams(DatabaseConnector databaseConnector) {
+        try {
+            try (ResultSet rs = databaseConnector.executeQuery("SELECT * FROM mineTeamsTeams")) {
+                while (rs.next()) {
+                    Team team = new Team(rs);
+                    teams.add(team);
+                }
+                Bukkit.getLogger().info(" Pomyślnie załadowano " + teams.size() + " zespołów.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
