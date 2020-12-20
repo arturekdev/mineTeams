@@ -74,6 +74,19 @@ public class Team {
         this.needUpdate = true;
     }
 
+    public double getKD() {
+
+        double kills = this.stats.getKills();
+        double deaths = this.stats.getDeaths();
+        double kd = kills / deaths;
+
+        if (Double.isInfinite(kd)) {
+            kd = kills;
+        }
+
+        return kd;
+    }
+
     public boolean isNotOnTeam(Player player) {
         return !members.contains(player.getUniqueId()) && owner != player.getUniqueId();
     }

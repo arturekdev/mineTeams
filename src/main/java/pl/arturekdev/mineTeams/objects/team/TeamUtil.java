@@ -6,14 +6,14 @@ import pl.arturekdev.mineTeams.database.DatabaseConnector;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TeamUtil {
 
-    private static final Set<Team> teams = new HashSet<>();
+    private static final List<Team> teams = new ArrayList<>();
 
-    public static Set<Team> getTeams() {
+    public static List<Team> getTeams() {
         return teams;
     }
 

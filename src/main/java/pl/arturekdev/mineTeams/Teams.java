@@ -14,7 +14,6 @@ import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineTeams.objects.user.UserUtil;
 import pl.arturekdev.mineTeams.placeholder.PlaceholderExpansionTeams;
-import pl.arturekdev.mineTeams.placeholder.PlaceholderExpansionUsers;
 import pl.arturekdev.mineTeams.runnable.TeamsGlowingUpdater;
 import pl.arturekdev.mineTeams.runnable.TeamsImportanceRunnable;
 import pl.arturekdev.mineTeams.runnable.TeamsSaveRunnable;
@@ -62,7 +61,6 @@ public final class Teams extends JavaPlugin {
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderExpansionTeams().register();
-            new PlaceholderExpansionUsers().register();
         }
     }
 

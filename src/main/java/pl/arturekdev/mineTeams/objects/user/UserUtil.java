@@ -5,15 +5,15 @@ import pl.arturekdev.mineTeams.database.DatabaseConnector;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class UserUtil {
 
-    private static final Set<User> users = new HashSet<>();
+    private static final List<User> users = new ArrayList<>();
 
-    public static Set<User> getUsers() {
+    public static List<User> getUsers() {
         return users;
     }
 
