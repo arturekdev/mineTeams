@@ -23,7 +23,7 @@ public class BankCommand extends SubCommand {
             return;
         }
 
-        if (arguments.length != 3) {
+        if (arguments.length != 2) {
             MessageUtil.sendMessage(player, Messages.get("teamBalance", " &8>> &aBank zespołu aktualnie posiada: &e%balance% Iskier").replace("%balance%", String.valueOf(team.getStats().getBank())));
             MessageUtil.sendMessage(player, Messages.get("usageBank", " &8>> &cPoprawne użycie: &e/team bank <withdraw/deposit> <ilość>"));
             return;
@@ -32,7 +32,7 @@ public class BankCommand extends SubCommand {
         int value;
 
         try {
-            value = Integer.parseInt(arguments[2]);
+            value = Integer.parseInt(arguments[1]);
         } catch (Exception e) {
             MessageUtil.sendMessage(player, Messages.get("argumentIsNotNumber", " &8>> &cIlość musi być liczbą!"));
             return;
@@ -40,7 +40,7 @@ public class BankCommand extends SubCommand {
 
         EconomyService economyService = new EconomyService();
 
-        if (arguments[1].equalsIgnoreCase("withdraw")) {
+        if (arguments[0].equalsIgnoreCase("withdraw")) {
             if (!team.getOwner().equals(player.getUniqueId())) {
                 MessageUtil.sendMessage(player, Messages.get("youNeedBeOwner", " &8>> &cMusisz być właścicielem!"));
                 return;
@@ -57,16 +57,18 @@ public class BankCommand extends SubCommand {
 
             team.getStats().setBank(team.getStats().getBank() - value);
             economyService.giveMoney(player, value);
+            team.setNeedUpdate(true);
 
             MessageUtil.sendMessage(player, Messages.get("successWithdrawBankMoney", " &8>> &aPomyślnie wypłaciłeś &e%value% Iskier &az banku swojego zespołu!").replace("%value%", String.valueOf(value)));
-        } else if (arguments[1].equalsIgnoreCase("deposit")) {
+        } else if (arguments[0].equalsIgnoreCase("deposit")) {
             if (!economyService.has(player, value)) {
                 MessageUtil.sendMessage(player, Messages.get("youDontHaveThatAmount", " &8>> &cNie posiadasz takiej ilości iskier"));
                 return;
             }
 
-            team.getStats().setBank(team.getStats().getBank() - value);
+            team.getStats().setBank(team.getStats().getBank() + value);
             economyService.takeMoney(player, value);
+            team.setNeedUpdate(true);
 
             MessageUtil.sendMessage(player, Messages.get("successDepositBankMoney", " &8>> &aPomyślnie wypłaciłeś &e%value% Iskier &ado banku swojego zespołu!").replace("%value%", String.valueOf(value)));
         }

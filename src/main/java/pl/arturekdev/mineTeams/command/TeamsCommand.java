@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import pl.arturekdev.mineTeams.command.util.SubCommand;
@@ -16,6 +17,7 @@ import pl.arturekdev.mineTeams.objects.team.TeamUtil;
 import pl.arturekdev.mineUtiles.utils.MessageUtil;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TeamsCommand implements CommandExecutor, TabCompleter {
 
@@ -103,63 +105,99 @@ public class TeamsCommand implements CommandExecutor, TabCompleter {
             return tab;
         }
 
+        if (args[0].equalsIgnoreCase("invite")) {
+
+            if (args.length == 2) {
+                List<String> old = Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toList());
+
+                List<String> tab = new ArrayList<>();
+                StringUtil.copyPartialMatches(args[1], old, tab);
+                Collections.sort(tab);
+                return tab;
+            }
+
+            return Collections.emptyList();
+        }
+
         if (args[0].equalsIgnoreCase("bank")) {
-            List<String> old = new ArrayList<>();
 
-            old.add("withdraw");
-            old.add("deposit");
+            if (args.length == 2) {
+                List<String> old = new ArrayList<>();
 
-            List<String> tab = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], old, tab);
-            Collections.sort(tab);
-            return tab;
+                old.add("withdraw");
+                old.add("deposit");
+
+                List<String> tab = new ArrayList<>();
+                StringUtil.copyPartialMatches(args[1], old, tab);
+                Collections.sort(tab);
+                return tab;
+            }
+
+            return Collections.emptyList();
         }
 
         if (args[0].equalsIgnoreCase("vault")) {
-            List<String> old = new ArrayList<>();
 
-            old.add("upgrade");
+            if (args.length == 2) {
+                List<String> old = new ArrayList<>();
 
-            List<String> tab = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], old, tab);
-            Collections.sort(tab);
-            return tab;
+                old.add("upgrade");
+
+                List<String> tab = new ArrayList<>();
+                StringUtil.copyPartialMatches(args[1], old, tab);
+                Collections.sort(tab);
+                return tab;
+            }
+
+            return Collections.emptyList();
+
         }
 
         if (args[0].equalsIgnoreCase("slots")) {
-            List<String> old = new ArrayList<>();
 
-            old.add("upgrade");
+            if (args.length == 2) {
+                List<String> old = new ArrayList<>();
 
-            List<String> tab = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], old, tab);
-            Collections.sort(tab);
-            return tab;
+                old.add("upgrade");
+
+                List<String> tab = new ArrayList<>();
+                StringUtil.copyPartialMatches(args[1], old, tab);
+                Collections.sort(tab);
+                return tab;
+            }
+
+            return Collections.emptyList();
         }
 
         if (args[0].equalsIgnoreCase("kick")) {
-            List<String> old = new ArrayList<>();
 
-            Player player = (Player) sender;
+            if (args.length == 2) {
+                List<String> old = new ArrayList<>();
 
-            Team team = TeamUtil.getTeam(player);
+                Player player = (Player) sender;
 
-            if (team == null) {
-                return Collections.emptyList();
+                Team team = TeamUtil.getTeam(player);
+
+                if (team == null) {
+                    return Collections.emptyList();
+                }
+
+                if (!team.getOwner().equals(player.getUniqueId())) {
+                    return Collections.emptyList();
+                }
+
+                for (UUID member : team.getMembers()) {
+                    old.add(Bukkit.getOfflinePlayer(member).getName());
+                }
+
+                List<String> tab = new ArrayList<>();
+                StringUtil.copyPartialMatches(args[1], old, tab);
+                Collections.sort(tab);
+                return tab;
+
             }
 
-            if (!team.getOwner().equals(player.getUniqueId())) {
-                return Collections.emptyList();
-            }
-
-            for (UUID member : team.getMembers()) {
-                old.add(Bukkit.getOfflinePlayer(member).getName());
-            }
-
-            List<String> tab = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], old, tab);
-            Collections.sort(tab);
-            return tab;
+            return Collections.emptyList();
         }
 
 
