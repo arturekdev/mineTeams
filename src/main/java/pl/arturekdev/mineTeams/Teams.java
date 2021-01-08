@@ -74,7 +74,7 @@ public final class Teams extends JavaPlugin {
 
     private void initSchedulers() {
         Bukkit.getScheduler().runTaskTimer(this, new TeamsGlowingUpdater(), 20, 20);
-        Bukkit.getScheduler().runTaskTimer(this, new TeamsImportanceRunnable(), 20, 20);
+        Bukkit.getScheduler().runTaskTimer(this, new TeamsImportanceRunnable(databaseConnector), 20, 20);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new TeamsSaveRunnable(databaseConnector), 60, 60);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new UsersSaveRunnable(databaseConnector), 60, 60);
     }

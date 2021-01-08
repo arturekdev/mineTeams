@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import pl.arturekdev.mineTeams.Teams;
+import pl.arturekdev.mineTeams.database.DatabaseConnector;
 import pl.arturekdev.mineTeams.messages.Messages;
 import pl.arturekdev.mineTeams.objects.team.Team;
 import pl.arturekdev.mineTeams.objects.team.TeamUtil;
@@ -11,6 +12,12 @@ import pl.arturekdev.mineUtiles.utils.MessageUtil;
 import pl.arturekdev.mineUtiles.utils.TimeUtil;
 
 public class TeamsImportanceRunnable implements Runnable {
+
+    private final DatabaseConnector databaseConnector;
+
+    public TeamsImportanceRunnable(DatabaseConnector databaseConnector) {
+        this.databaseConnector = databaseConnector;
+    }
 
     @Override
     public void run() {
@@ -35,6 +42,7 @@ public class TeamsImportanceRunnable implements Runnable {
                 continue;
             }
 
+            databaseConnector.executeUpdate("DELETE FROM `mineTeamsTeams` WHERE `tag` = '" + team.getTag() + "'");
             Bukkit.broadcastMessage(MessageUtil.fixColor(Messages.get("teamDeleteImportance", " &6&lZespoły &8>> &cZespół &e%tag% &cwygasł z powodu nieopłacania go!").replace("%tag%", team.getTag())));
         }
 
