@@ -1,19 +1,14 @@
 package pl.arturekdev.mineTeams.placeholder;
 
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.entity.Player;
-import pl.arturekdev.mineTeams.comparators.TeamBankRanking;
-import pl.arturekdev.mineTeams.comparators.TeamKDRanking;
-import pl.arturekdev.mineTeams.comparators.UserKillRanking;
-import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.objects.team.Team;
-import pl.arturekdev.mineTeams.objects.team.TeamUtil;
-import pl.arturekdev.mineTeams.objects.user.User;
-import pl.arturekdev.mineTeams.objects.user.UserUtil;
-import pl.arturekdev.mineUtiles.utils.MessageUtil;
-import pl.arturekdev.mineUtiles.utils.TimeUtil;
+import me.clip.placeholderapi.expansion.*;
+import org.bukkit.entity.*;
+import pl.arturekdev.mineTeams.comparators.*;
+import pl.arturekdev.mineTeams.messages.*;
+import pl.arturekdev.mineTeams.objects.team.*;
+import pl.arturekdev.mineTeams.objects.user.*;
+import pl.arturekdev.mineUtiles.utils.*;
 
-import java.util.List;
+import java.util.*;
 
 public class PlaceholderExpansionTeams extends PlaceholderExpansion {
 
@@ -57,7 +52,7 @@ public class PlaceholderExpansionTeams extends PlaceholderExpansion {
         }
 
         if (identifier.equalsIgnoreCase("team_kd")) {
-            return team == null ? MessageUtil.fixColor(Messages.get("nullTeam", "&cBrak")) : String.valueOf(team.getKD());
+            return team == null ? MessageUtil.fixColor(Messages.get("nullTeam", "&cBrak")) : team.getKDString();
         }
 
         if (identifier.equalsIgnoreCase("team_members")) {
@@ -87,7 +82,7 @@ public class PlaceholderExpansionTeams extends PlaceholderExpansion {
 
             Team team1 = teams.get(integer);
 
-            return MessageUtil.fixColor("&e%tag% &8⇒ &f%kd% K/D").replace("%tag%", team1.getTag()).replace("%kd%", String.valueOf(team1.getKD()));
+            return MessageUtil.fixColor("&e%tag% &8⇒ &f%kd% K/D").replace("%tag%", team1.getTag()).replace("%kd%", team1.getKDString());
         }
 
         if (identifier.contains("team_topBank_")) {
@@ -119,7 +114,7 @@ public class PlaceholderExpansionTeams extends PlaceholderExpansion {
         }
 
         if (identifier.equalsIgnoreCase("user_kd")) {
-            return String.valueOf(user.getKills() / user.getDeaths());
+            return user.getKDString();
         }
 
         if (identifier.contains("user_top_")) {
@@ -141,7 +136,7 @@ public class PlaceholderExpansionTeams extends PlaceholderExpansion {
                 return MessageUtil.fixColor("&cBrak");
             }
 
-            return MessageUtil.fixColor("&e%name% &8⇒ &f%kills% &eZabójstw").replace("%name%", user1.getUsername()).replace("%kills%", String.valueOf(user1.getKills()));
+            return MessageUtil.fixColor("&e%name% &8⇒ &f%kills% &eZabójstw").replace("%name%", user1.getUsername() == null ? "Nazwa niedostępna" : user1.getUsername()).replace("%kills%", String.valueOf(user1.getKills()));
         }
 
         return null;

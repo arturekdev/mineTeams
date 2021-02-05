@@ -30,17 +30,13 @@ public class AsyncPlayerChatListener implements Listener {
 
         e.setCancelled(true);
 
-        for (UUID member : team.getMembers()) {
+        for (Player member : team.onlinePlayers()) {
 
-            Player memberPlayer = Bukkit.getOfflinePlayer(member).getPlayer();
-
-            if (memberPlayer == null) continue;
-
-            MessageUtil.sendMessage(memberPlayer, Messages.get("teamFormatMessage", " &6&lZespół &e%player% &8>> &7%message%").replace("%player%", player.getName()).replace("%message%", e.getMessage().replaceFirst("!", "")));
+            MessageUtil.sendMessage(member, Messages.get("teamFormatMessage", " &6&lZespół &e%player% &8>> &7%message%").replace("%player%", player.getName()).replace("%message%", e.getMessage().replaceFirst("!", "")));
 
         }
 
-        MessageUtil.sendMessage(player, Messages.get("teamFormatMessage", " &6&lZespół &e%player% &8>> &7%message%").replace("%player%", player.getName()).replace("%message%", e.getMessage().replaceFirst("!", "")));
+        //MessageUtil.sendMessage(player, Messages.get("teamFormatMessage", " &6&lZespół &e%player% &8>> &7%message%").replace("%player%", player.getName()).replace("%message%", e.getMessage().replaceFirst("!", "")));
 
     }
 

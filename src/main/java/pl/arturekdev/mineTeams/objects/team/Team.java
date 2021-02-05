@@ -1,22 +1,19 @@
 package pl.arturekdev.mineTeams.objects.team;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import pl.arturekdev.mineTeams.configuration.Config;
-import pl.arturekdev.mineTeams.database.DatabaseConnector;
-import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.util.ItemSerializer;
-import pl.arturekdev.mineUtiles.utils.TimeUtil;
+import com.google.gson.*;
+import com.google.gson.reflect.*;
+import lombok.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.*;
+import pl.arturekdev.mineTeams.configuration.*;
+import pl.arturekdev.mineTeams.database.*;
+import pl.arturekdev.mineTeams.messages.*;
+import pl.arturekdev.mineTeams.util.*;
+import pl.arturekdev.mineUtiles.utils.*;
 
-import java.lang.reflect.Type;
-import java.sql.ResultSet;
+import java.lang.reflect.*;
+import java.sql.*;
 import java.util.*;
 
 @Getter
@@ -75,16 +72,11 @@ public class Team {
     }
 
     public double getKD() {
+        return Double.parseDouble(getKDString());
+    }
 
-        double kills = this.stats.getKills();
-        double deaths = this.stats.getDeaths();
-        double kd = kills / deaths;
-
-        if (Double.isInfinite(kd)) {
-            kd = kills;
-        }
-
-        return kd;
+    public String getKDString() {
+        return String.format("%.1f", (double) this.stats.getKills() / this.stats.getDeaths()).replace(",", ".");
     }
 
     public boolean isNotOnTeam(Player player) {

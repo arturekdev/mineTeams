@@ -1,25 +1,19 @@
 package pl.arturekdev.mineTeams;
 
-import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-import pl.arturekdev.mineTeams.command.TeamsCommand;
-import pl.arturekdev.mineTeams.configuration.Config;
-import pl.arturekdev.mineTeams.database.DatabaseConnector;
-import pl.arturekdev.mineTeams.listeners.AsyncPlayerChatListener;
-import pl.arturekdev.mineTeams.listeners.EntityDamageByEntityListener;
-import pl.arturekdev.mineTeams.listeners.InventoryCloseListener;
-import pl.arturekdev.mineTeams.listeners.PlayerDeathListener;
-import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.objects.team.TeamUtil;
-import pl.arturekdev.mineTeams.objects.user.UserUtil;
-import pl.arturekdev.mineTeams.placeholder.PlaceholderExpansionTeams;
-import pl.arturekdev.mineTeams.runnable.TeamsGlowingUpdater;
-import pl.arturekdev.mineTeams.runnable.TeamsImportanceRunnable;
-import pl.arturekdev.mineTeams.runnable.TeamsSaveRunnable;
-import pl.arturekdev.mineTeams.runnable.UsersSaveRunnable;
+import lombok.*;
+import org.bukkit.*;
+import org.bukkit.plugin.java.*;
+import pl.arturekdev.mineTeams.command.*;
+import pl.arturekdev.mineTeams.configuration.*;
+import pl.arturekdev.mineTeams.database.*;
+import pl.arturekdev.mineTeams.listeners.*;
+import pl.arturekdev.mineTeams.messages.*;
+import pl.arturekdev.mineTeams.objects.team.*;
+import pl.arturekdev.mineTeams.objects.user.*;
+import pl.arturekdev.mineTeams.placeholder.*;
+import pl.arturekdev.mineTeams.runnable.*;
 
-import java.io.File;
+import java.io.*;
 
 @Getter
 public final class Teams extends JavaPlugin {
@@ -36,6 +30,10 @@ public final class Teams extends JavaPlugin {
     public void onEnable() {
 
         instance = this;
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new PlaceholderExpansionTeams().register();
+        }
 
         configuration = new Config(new File(this.getDataFolder(), "config.json"));
         configuration.parseConfiguration(this);
@@ -59,9 +57,11 @@ public final class Teams extends JavaPlugin {
         getCommand("team").setExecutor(new TeamsCommand(databaseConnector, configuration));
         getCommand("team").setTabCompleter(new TeamsCommand(databaseConnector, configuration));
 
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            new PlaceholderExpansionTeams().register();
-        }
+    }
+
+    @Override
+    public void onDisable() {
+        TeamUtil.getTeams().forEach(team -> team.update(databaseConnector));
     }
 
     private void initListeners() {

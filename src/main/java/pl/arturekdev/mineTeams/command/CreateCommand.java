@@ -1,19 +1,20 @@
 package pl.arturekdev.mineTeams.command;
 
-import com.google.gson.JsonObject;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import pl.arturekdev.mineTeams.Teams;
-import pl.arturekdev.mineTeams.command.util.SubCommand;
-import pl.arturekdev.mineTeams.configuration.Config;
-import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.objects.team.Team;
-import pl.arturekdev.mineTeams.objects.team.TeamUtil;
-import pl.arturekdev.mineUtiles.utils.MessageUtil;
+import com.google.gson.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import pl.arturekdev.mineEconomy.*;
+import pl.arturekdev.mineTeams.*;
+import pl.arturekdev.mineTeams.command.util.*;
+import pl.arturekdev.mineTeams.configuration.*;
+import pl.arturekdev.mineTeams.messages.*;
+import pl.arturekdev.mineTeams.objects.team.*;
+import pl.arturekdev.mineUtiles.utils.*;
 
 public class CreateCommand extends SubCommand {
 
     private final Config configuration;
+    private final EconomyService economyService = new EconomyService();
 
     public CreateCommand(Config configuration) {
         super("create");
@@ -34,6 +35,13 @@ public class CreateCommand extends SubCommand {
             return;
         }
 
+        int coast = config.get("createCoast").getAsInt();
+
+        if (!economyService.has(player, coast)) {
+            MessageUtil.sendMessage(player, Messages.get("playerDosntHasMoney", " &8>> &cNie posiadasz &e%coast% Iskier &caby móc założyć zespół!").replace("%coast%", String.valueOf(coast)));
+            return;
+        }
+
         String tag = arguments[0];
 
         if (tag.length() > config.get("maxCharsTag").getAsInt()) {
@@ -49,6 +57,7 @@ public class CreateCommand extends SubCommand {
         Team team = new Team(tag, player.getUniqueId(), configuration);
 
         TeamUtil.getTeams().add(team);
+        economyService.takeMoney(player, coast);
 
         MessageUtil.sendMessage(player, Messages.get("successCreate", " &8>> &aPomyślnie stworzyłeś zespół o tagu &e%tag%").replace("%tag%", tag));
         Bukkit.broadcastMessage(MessageUtil.fixColor(Messages.get("successCreateBroadcast", " &6&lZespoły &8>> &e%player% &azałożył zespoł o tagu &e%tag%&a! Gratulacje!").replace("%player%", player.getName()).replace("%tag%", team.getTag())));

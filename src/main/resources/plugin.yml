@@ -5,6 +5,7 @@ api-version: 1.16
 authors: [ arturekdev ]
 description: Minecraft teams
 website: https://minecodes.pl
+depend: [PlaceholderAPI]
 commands:
   team:
     aliases:

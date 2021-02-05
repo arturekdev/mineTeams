@@ -45,6 +45,14 @@ public class User {
         return Bukkit.getOfflinePlayer(uuid).getPlayer();
     }
 
+    public double getKD() {
+        return Double.parseDouble(getKDString());
+    }
+
+    public String getKDString() {
+        return String.format("%.1f", (double) this.kills / this.deaths).replace(",", ".");
+    }
+
     public void update(DatabaseConnector databaseConnector) {
 
         if (!this.needUpdate) {

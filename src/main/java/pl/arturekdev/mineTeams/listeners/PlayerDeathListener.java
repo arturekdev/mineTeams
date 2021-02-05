@@ -1,20 +1,16 @@
 package pl.arturekdev.mineTeams.listeners;
 
-import com.google.gson.JsonObject;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import pl.arturekdev.mineEconomy.EconomyService;
-import pl.arturekdev.mineTeams.Teams;
-import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.objects.team.Team;
-import pl.arturekdev.mineTeams.objects.team.TeamUtil;
-import pl.arturekdev.mineTeams.objects.user.User;
-import pl.arturekdev.mineTeams.objects.user.UserUtil;
-import pl.arturekdev.mineUtiles.utils.MessageUtil;
-import pl.arturekdev.mineUtiles.utils.TimeUtil;
+import com.google.gson.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import pl.arturekdev.mineEconomy.*;
+import pl.arturekdev.mineTeams.*;
+import pl.arturekdev.mineTeams.messages.*;
+import pl.arturekdev.mineTeams.objects.team.*;
+import pl.arturekdev.mineTeams.objects.user.*;
+import pl.arturekdev.mineUtiles.utils.*;
 
 public class PlayerDeathListener implements Listener {
 
@@ -35,14 +31,23 @@ public class PlayerDeathListener implements Listener {
 
         JsonObject config = Teams.getInstance().getConfiguration().getElement("configuration").getAsJsonObject();
 
-        long playTime = System.currentTimeMillis() - victim.getFirstPlayed();
+        long playTime = victim.getStatistic(Statistic.PLAY_ONE_MINUTE) * 50L;
 
         if (playTime < TimeUtil.timeFromString(config.get("minimumPlayTime").getAsString())) {
             MessageUtil.sendMessage(killer, Messages.get("minimHoursPlayed", " &8>> &cGracz, którego zabiłeś, nie rozegrał jeszcze minimalnej ilości godzin, więc nie otrzymasz za niego nagrody!"));
             return;
         }
 
-        if (victimUser.getLastDeath() > System.currentTimeMillis() + TimeUtil.timeFromString(config.get("deathsDelay").getAsString())) {
+        /*
+
+        if (Objects.equals(Objects.requireNonNull(victim.getAddress()).getAddress(), Objects.requireNonNull(killer.getAddress()).getAddress())) {
+            MessageUtil.sendMessage(killer, Messages.get("sameIPAdresses", " &8>> &cGracz, którego zabiłeś, posiada taki sam adres IP."));
+            return;
+        }
+
+         */
+
+        if (System.currentTimeMillis() - victimUser.getLastDeath() < TimeUtil.timeFromString(config.get("deathsDelay").getAsString())) {
             MessageUtil.sendMessage(killer, Messages.get("lastHourKilled", " &8>> &cGracz, którego zabiłeś, został już zabity w ciągu godziny, więc nie otrzymujesz za niego nagrody!"));
             return;
         }
@@ -50,7 +55,7 @@ public class PlayerDeathListener implements Listener {
         Team victimTeam = TeamUtil.getTeam(victim);
         Team killerTeam = TeamUtil.getTeam(killer);
 
-        if (killerTeam == victimTeam) {
+        if (killerTeam == victimTeam && victimTeam != null) {
             MessageUtil.sendMessage(killer, Messages.get("sameTeamPlayer", " &8>> &cZabijąc swojego członka zespołu nie zmienią się statystyki!"));
             return;
         }
@@ -72,11 +77,16 @@ public class PlayerDeathListener implements Listener {
         victimUser.setDeaths(victimUser.getDeaths() + 1);
         killerUser.setNeedUpdate(true);
         victimUser.setNeedUpdate(true);
+        victimUser.setLastDeath(System.currentTimeMillis());
 
-        economyService.takeMoney(victim, money);
-        economyService.giveMoney(killer, money);
+        if (killerTeam != null) {
+            economyService.takeMoney(victim, money);
+            economyService.giveMoney(killer, money);
+        } else {
+            money = 0;
+        }
 
-        Bukkit.broadcastMessage(MessageUtil.fixColor(" &4&l✞ %victimTeam% &7%victim% &8(#d9293c-%money% Iskier&8) &czostał zabiy przez %killerTeam% &7%killer% &8(&a+%money% Iskier&8)"
+        Bukkit.broadcastMessage(MessageUtil.fixColor(" &4&l✞ %victimTeam% &7%victim% &8(#d9293c-%money% Iskier&8) &czostał zabity przez %killerTeam% &7%killer% &8(&a+%money% Iskier&8)"
                 .replace("%victimTeam%", victimTeam == null ? "" : "&8(&e" + victimTeam.getTag() + "&8)")
                 .replace("%killerTeam%", killerTeam == null ? "" : "&8(&e" + killerTeam.getTag() + "&8)")
                 .replace("%victim%", victim.getName())

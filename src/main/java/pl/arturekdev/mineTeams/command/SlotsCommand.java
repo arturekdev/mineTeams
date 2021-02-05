@@ -26,7 +26,7 @@ public class SlotsCommand extends SubCommand {
             return;
         }
 
-        if (arguments.length != 2) {
+        if (arguments.length != 1) {
             MessageUtil.sendMessage(player, Messages.get("teamSlots", " &8>> &aTwój zespół aktualnie posiada &e%slots% &aslotów.").replace("%slots%", String.valueOf(team.getSlots())));
             if (team.getSlots() != config.get("slotsLimit").getAsInt()) {
                 MessageUtil.sendMessage(player, Messages.get("slotsUpgradeInformation", " &8>> &aMożesz powiększyć ilośc slotów w zespole komendą &e/team slots upgrade"));
@@ -34,7 +34,7 @@ public class SlotsCommand extends SubCommand {
             return;
         }
 
-        if (!arguments[1].equalsIgnoreCase("upgrade")) {
+        if (!arguments[0].equalsIgnoreCase("upgrade")) {
             MessageUtil.sendMessage(player, Messages.get("usageSlotsUpgrade", " &8>> &cPoprawne użycie: &e/team slots upgrade"));
         }
 
@@ -43,12 +43,15 @@ public class SlotsCommand extends SubCommand {
             return;
         }
 
-        if (team.getStats().getBank() < config.get("slotsUpgradeCoast").getAsInt()) {
-            MessageUtil.sendMessage(player, Messages.get("bankDosntHasMoney", " &8>> &cBank twojego zespołu nie ma wystarczająco pieniędzy!"));
+        int coast = config.get("slotsUpgradeCoast").getAsInt();
+        if (team.getStats().getBank() < coast) {
+            MessageUtil.sendMessage(player, Messages.get("bankDosntHasMoney", " &8>> &cBank twojego zespołu nie ma wystarczająco pieniędzy! Wymagana kwota to &e%coast% Iskier").replace("%coast%", String.valueOf(coast)));
             return;
         }
 
         team.setSlots(team.getSlots() + 1);
+        team.getStats().setBank(team.getStats().getBank() - coast);
+
         team.setNeedUpdate(true);
 
         MessageUtil.sendMessage(player, Messages.get("successUpgradeSlots", " &8>> &aPomyślnie powiększyłeś ilość slotów!"));

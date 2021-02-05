@@ -1,15 +1,14 @@
 package pl.arturekdev.mineTeams.command;
 
-import com.google.gson.JsonObject;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import pl.arturekdev.mineTeams.Teams;
-import pl.arturekdev.mineTeams.command.util.SubCommand;
-import pl.arturekdev.mineTeams.messages.Messages;
-import pl.arturekdev.mineTeams.objects.team.Team;
-import pl.arturekdev.mineTeams.objects.team.TeamUtil;
-import pl.arturekdev.mineUtiles.utils.MessageUtil;
+import com.google.gson.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.*;
+import pl.arturekdev.mineTeams.*;
+import pl.arturekdev.mineTeams.command.util.*;
+import pl.arturekdev.mineTeams.messages.*;
+import pl.arturekdev.mineTeams.objects.team.*;
+import pl.arturekdev.mineUtiles.utils.*;
 
 public class VaultCommand extends SubCommand {
 
@@ -28,7 +27,7 @@ public class VaultCommand extends SubCommand {
             return;
         }
 
-        if (arguments.length != 2) {
+        if (arguments.length != 1) {
             player.openInventory(team.getVault());
             if (team.getVaultSize() < 6) {
                 MessageUtil.sendMessage(player, Messages.get("canUpgradeVaultInformation", " &8>> &aMożesz powiększyć swój skarbiec komendą &e/team vault upgrade"));
@@ -36,7 +35,7 @@ public class VaultCommand extends SubCommand {
             return;
         }
 
-        if (!arguments[1].equalsIgnoreCase("upgrade")) {
+        if (!arguments[0].equalsIgnoreCase("upgrade")) {
             MessageUtil.sendMessage(player, Messages.get("usageVaultUpgrade", " &8>> &cPoprawne użycie: &e/team vault upgrade"));
         }
 
@@ -45,13 +44,14 @@ public class VaultCommand extends SubCommand {
             return;
         }
 
-        if (team.getStats().getBank() < config.get("vaultUpgradeCoast").getAsInt()) {
-            MessageUtil.sendMessage(player, Messages.get("bankDosntHasMoney", " &8>> &cBank twojego zespołu nie ma wystarczająco pieniędzy!"));
+        int coast = config.get("vaultUpgradeCoast").getAsInt();
+        if (team.getStats().getBank() < coast) {
+            MessageUtil.sendMessage(player, Messages.get("bankDosntHasMoney", " &8>> &cBank twojego zespołu nie ma wystarczająco pieniędzy! Wymagana kwota to &e%coast% Iskier").replace("%coast%", String.valueOf(coast)));
             return;
         }
 
-
         team.setVaultSize(team.getVaultSize() + 1);
+        team.getStats().setBank(team.getStats().getBank() - coast);
 
         Inventory inventory = Bukkit.createInventory(null, 9 * team.getVaultSize(), Messages.get("vaultTitleGUI", "&6Skarbiec twojego zespołu"));
         inventory.setContents(team.getVault().getContents());
